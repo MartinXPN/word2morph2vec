@@ -1,0 +1,3 @@
+git+https://github.com/MartinXPN/sentence2tags@master#egg=sentence2tags
+git+https://github.com/MartinXPN/word2morph@master#egg=word2morph
+git+https://github.com/MartinXPN/morph2vec@master#egg=morph2vec

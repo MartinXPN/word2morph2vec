@@ -12,11 +12,11 @@ URL = 'https://github.com/MartinXPN/word2morph2vec'
 EMAIL = 'mirakyanmartin@gmail.com'
 AUTHOR = 'Martin Mirakyan'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.0.1'
+VERSION = '1.0.0'
 
 # What packages are required for this module to be executed?
 with open('requirements.txt') as f:
-    install_requires = f.readlines()
+    install_requires = [line for line in f.readlines() if not line.startswith('git+')]
 REQUIRED = install_requires
 
 # What packages are optional?
@@ -105,6 +105,11 @@ setup(
     #     'console_scripts': ['mycli=mymodule:cli'],
     # },
     install_requires=REQUIRED,
+    dependency_links=[
+        'https://github.com/MartinXPN/sentence2tags/tarball/master#egg=package-1.0',
+        'https://github.com/MartinXPN/word2morph/tarball/master#egg=package-1.0',
+        'https://github.com/MartinXPN/morph2vec/tarball/master#egg=package-1.0',
+    ],
     extras_require=EXTRAS,
     include_package_data=True,
     license='MIT',
