@@ -5,6 +5,8 @@ from shutil import rmtree
 
 from setuptools import find_packages, setup, Command
 
+from word2morph2vec import __version__
+
 # Package meta-data.
 NAME = 'word2morph2vec'
 DESCRIPTION = 'End to end pipeline for extracting morphological vectors from a given word'
@@ -12,12 +14,12 @@ URL = 'https://github.com/MartinXPN/word2morph2vec'
 EMAIL = 'mirakyanmartin@gmail.com'
 AUTHOR = 'Martin Mirakyan'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.0.0'
+VERSION = __version__
 
 # What packages are required for this module to be executed?
-with open('requirements.txt') as f:
-    install_requires = [line for line in f.readlines() if not line.startswith('git+')]
-REQUIRED = install_requires
+REQUIRED = [
+    'nltk==3.4'
+]
 
 # What packages are optional?
 EXTRAS = {

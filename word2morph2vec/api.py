@@ -1,20 +1,28 @@
-from typing import Optional, List
+from typing import List, Tuple
 
-from sentence2tags.parser import Parser
+from morph2vec import Morph2Vec
+from nltk import everygrams
+from sentence2tags import Sentence2Tags, sentence_to_tree
 from word2morph import Word2Morph
 
 
 class Word2Morph2Vec(object):
     def __init__(self,
-                 sentence2tags: Optional[Parser] = None,
-                 word2morph: Optional[Word2Morph] = None,
-                 morph2vec=None):
+                 sentence2tags: Sentence2Tags,
+                 word2morph: Word2Morph,
+                 morph2vec: Morph2Vec):
         self.sentence2tags = sentence2tags
         self.word2morph = word2morph
         self.morph2vec = morph2vec
 
-    def get_sentence_vector(self, sentence: List[str]):
-        lemmas, morph_tags, pos_tags = self.sentence2tags.predict(sentence)
+    def get_sentence_vectors(self, sentence: List[str]):
+        tree = sentence_to_tree(sentence=sentence)
+        tokens = self.sentence2tags[tree].tokens
+
+        lemmas = [token.fields['lemma'] for token in tokens]
+        pos_tags = [token.fields['upostag'] for token in tokens]
+        morph_tags = [tuple(token.fields['feats'].split('|')) for token in tokens]
+
         vectors = [self.get_word_vector(word=word, lemma=lemma, morph_tags=mt, pos_tag=pos)
                    for word, lemma, mt, pos in zip(sentence, lemmas, morph_tags, pos_tags)]
         return vectors
@@ -22,14 +30,17 @@ class Word2Morph2Vec(object):
     def get_word_vector(self,
                         word: str,
                         lemma: str,
-                        morph_tags: Optional[List[str]] = None,
-                        pos_tag: Optional[str] = None):
+                        pos_tag: str = '',
+                        morph_tags: Tuple[str] = tuple()):
         morphemes = self.word2morph[lemma]
-        vector = self.morph2vec.get(wordform=word, lemma=lemma,
-                                    morph_tags=morph_tags, morphemes=morphemes, pos_tag=pos_tag)
+        vector = self.morph2vec.get_vector(word=word, lemma=lemma, pos=pos_tag,
+                                           morph_tags=morph_tags,
+                                           morphemes=morphemes.segments,
+                                           ngrams=tuple([''.join(g) for g in everygrams(word, min_len=3, max_len=6)]))
         return vector
 
-
-def load_model(sentence2tags_path: str, word2morph_path: str, morph2vec_path: str):
-    # TODO load all 3 models and pass to word2morph2vec
-    return Word2Morph2Vec()
+    @staticmethod
+    def load_model(locale: str):
+        return Word2Morph2Vec(sentence2tags=Sentence2Tags.load_model(locale='hy'),
+                              word2morph=Word2Morph.load_model(locale='ru'),
+                              morph2vec=Morph2Vec.load_model(path='../morph2vec/logs/ru.bin'))
