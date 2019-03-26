@@ -18,7 +18,7 @@ VERSION = __version__
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'nltk>=3.4'
+    'nltk>=3.4',
 ]
 
 # What packages are optional?
@@ -110,6 +110,7 @@ setup(
     dependency_links=[
         'https://github.com/MartinXPN/sentence2tags/tarball/master#egg=package-1.0',
         'https://github.com/MartinXPN/word2morph/tarball/master#egg=package-1.0',
+        'https://github.com/MartinXPN/fastText/tarball/master#egg=package-1.0',
         'https://github.com/MartinXPN/morph2vec/tarball/master#egg=package-1.0',
     ],
     extras_require=EXTRAS,
