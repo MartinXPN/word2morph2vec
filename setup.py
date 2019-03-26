@@ -18,7 +18,7 @@ VERSION = __version__
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'nltk==3.4'
+    'nltk>=3.4'
 ]
 
 # What packages are optional?
