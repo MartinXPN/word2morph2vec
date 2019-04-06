@@ -14,6 +14,8 @@ class Word2Morph2Vec(object):
         self.sentence2tags = sentence2tags
         self.word2morph = word2morph
         self.morph2vec = morph2vec
+        self.ngram_min_len = self.morph2vec.model.f.getArgs().minn
+        self.ngram_max_len = self.morph2vec.model.f.getArgs().maxn
 
     def get_sentence_vectors(self, sentence: List[str]):
         tree = sentence_to_tree(sentence=sentence)
@@ -33,10 +35,12 @@ class Word2Morph2Vec(object):
                         pos_tag: str = '',
                         morph_tags: Tuple[str] = tuple()):
         morphemes = self.word2morph[lemma]
+        ngrams = tuple([''.join(g) for g in everygrams(word, min_len=self.ngram_min_len, max_len=self.ngram_max_len)])
+
         vector = self.morph2vec.get_vector(word=word, lemma=lemma, pos=pos_tag,
                                            morph_tags=morph_tags,
                                            morphemes=morphemes.segments,
-                                           ngrams=tuple([''.join(g) for g in everygrams(word, min_len=3, max_len=6)]))
+                                           ngrams=ngrams)
         return vector
 
     @staticmethod
