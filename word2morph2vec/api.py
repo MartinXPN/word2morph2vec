@@ -45,6 +45,6 @@ class Word2Morph2Vec(object):
 
     @staticmethod
     def load_model(locale: str):
-        return Word2Morph2Vec(sentence2tags=Sentence2Tags.load_model(locale='hy'),
-                              word2morph=Word2Morph.load_model(locale='ru'),
-                              morph2vec=Morph2Vec.load_model(path='../morph2vec/logs/ru.bin'))
+        return Word2Morph2Vec(sentence2tags=Sentence2Tags.load_model(locale=locale),
+                              word2morph=Word2Morph.load_model(locale=locale),
+                              morph2vec=Morph2Vec.load_model(locale=locale))

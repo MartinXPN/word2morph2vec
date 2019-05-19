@@ -1,6 +1,16 @@
 # word2morph2vec
 End to end pipeline for extracting morphological vectors from a given word
 
+### Prerequisites
+* Python 3.6
+* Clone the repository and install the dependencies
+```bash
+git clone https://github.com/MartinXPN/word2morph2vec.git
+cd word2morph2vec
+pip install .
+```
+
+
 
 ### Example usage
 ```python
